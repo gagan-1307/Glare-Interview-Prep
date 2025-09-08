@@ -10,6 +10,10 @@ import { Form } from "@/components/ui/form"
 import FormField from "./FormField"
 import Link from "next/link"
 import { useRouter } from "next/navigation"   // ✅ FIX
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { signIn, signUp } from "@/lib/actions/auth.action"
+import { auth } from "@/firebase/client"
+import {signInWithEmailAndPassword} from "firebase/auth"
 
 type FormType = "signin" | "signup"
 
@@ -35,12 +39,43 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "signup") {
+        const {name, email, password} = values;
+
+        const userCredentials =await createUserWithEmailAndPassword(auth, email, password);
+
+        const result = await signUp({
+          uid: userCredentials.user.uid,
+          name: name || "User",
+          email,
+          password
+        })
+
+        if(!result?.success){
+          toast.error(result?.message);
+          return;
+        }
+
         toast.success("Account created successfully! Please sign in.")
         router.push("/signin")
       } else {
+        const { email, password } = values
+
+        const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+
+        const idToken = await userCredentials.user.getIdToken();
+        if(!idToken){
+          toast.error("Failed to retrieve ID token. Please try again.");
+          return;
+        }
+
+        await signIn({
+          email,
+          idToken
+        })
+
         toast.success("Welcome back!")
         router.push("/")
       }
@@ -57,9 +92,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
       <div className="flex flex-col gap-6 card py-14 px-10">
         <div className="flex flex-row gap-2 justify-center">
           <Image src="/logo.svg" alt="Logo" width={38} height={32} />
-          <h2 className="text-primary-100">Prepwise</h2>
+          <h2 className="text-primary-100">Glare</h2>
         </div>
-        <h3>Practice job interview with AI</h3>
+        <h3 className="text-center">Practice job interview with AI</h3>
 
         <Form {...form}>
           <form
