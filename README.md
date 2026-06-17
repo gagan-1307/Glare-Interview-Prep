@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Glare — AI-Powered Mock Interview Platform
+
+Practice job interviews with a real-time voice AI interviewer. Glare lets users sign up, start a mock interview, and have a live spoken conversation with an AI agent that asks questions and gives feedback — built to simulate the experience of a real interview rather than a static Q&A form.
+
+🔗 **Live App:** [glare-interview-preparation.vercel.app](https://glare-interview-preparation.vercel.app)
+
+## Overview
+
+Most interview prep tools are just flashcards or text-based Q&A. Glare instead runs the interview as a real conversation: a voice AI agent speaks the questions, listens to your spoken answers, and responds naturally — closer to what an actual interview round feels like.
+
+## Features
+
+- **Real-time voice interviews** — Conversational AI interviewer powered by [Vapi](https://vapi.ai), handling speech-to-text, text-to-speech, and turn-taking in real time
+- **AI-generated questions & feedback** — Google's Gemini model (via the Vercel AI SDK) generates interview questions and evaluates responses
+- **Authentication** — Email/password sign up and sign in via Firebase Auth
+- **Persistent sessions** — Interview history and user data stored with Firebase / Firebase Admin SDK
+- **Responsive UI** — Built with Tailwind CSS and Radix-based UI components (shadcn-style), with toast notifications via Sonner
+- **Form validation** — React Hook Form + Zod for sign up/sign in and interview setup forms
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router, Turbopack) |
+| UI | React 19, TypeScript, Tailwind CSS, Radix UI, lucide-react |
+| Voice AI | Vapi (`@vapi-ai/web`) |
+| LLM | Google Gemini via Vercel AI SDK (`@ai-sdk/google`, `ai`) |
+| Auth & Data | Firebase, Firebase Admin |
+| Forms | React Hook Form, Zod |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- A Firebase project (Web + Admin SDK credentials)
+- A Vapi account and API key
+- A Google AI (Gemini) API key
+
+### Installation
+
+```bash
+git clone https://github.com/gagan-1307/Glare-Interview-Prep.git
+cd Glare-Interview-Prep
+npm install
+```
+
+### Environment Variables
+
+Create a `.env.local` file in the project root with your own credentials:
+
+```bash
+# Firebase (client)
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
+# Firebase (admin)
+FIREBASE_PROJECT_ID=
+FIREBASE_CLIENT_EMAIL=
+FIREBASE_PRIVATE_KEY=
+
+# Vapi
+NEXT_PUBLIC_VAPI_WEB_TOKEN=
+
+# Google Gemini
+GOOGLE_GENERATIVE_AI_API_KEY=
+```
+
+> Replace these with the exact variable names your code reads — check `firebase/` and `lib/` for the precise keys used.
+
+### Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Roadmap
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [ ] Add interview performance analytics/history dashboard
+- [ ] Support more interview types/roles
+- [ ] Export feedback as a downloadable report
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is open source and available under the [MIT License](LICENSE).
